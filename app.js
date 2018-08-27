@@ -31,7 +31,7 @@ L.control.locate({ drawCircle: false, drawMarker: true }).addTo(map);
 L.Control.Link = L.Control.extend({
     onAdd: map => {
         var div = L.DomUtil.create('div', 'leaflet-control-layers control-padding control-bigfont');
-        div.innerHTML += '<a target="_blank" href="https://github.com/zetx16/parking-lanes">GitHub</a>';
+        div.innerHTML += '<a target="_blank" href="https://github.com/zetx16/addr-duplicates">GitHub</a>';
         return div;
     }
 });
