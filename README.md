@@ -1,2 +1,2 @@
-# parking-lanes
-Parking lanes viewer from OpenStreetMap
+# addr-duplicates
+Address duplicates viewer from OpenStreetMap
