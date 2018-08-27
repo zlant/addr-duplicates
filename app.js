@@ -80,7 +80,7 @@ var lanes = [];
 var overpassUrl = 'https://overpass-api.de/api/interpreter?data='
 var overpassQuery = '[out:csv(::lat, ::lon, "addr:street", "addr:housenumber", "addr:suburb"; false)][timeout:25];(nwr["addr:street"]["addr:housenumber"]({{bbox}}););out center;'
 
-var nominatimUrl = 'http://nominatim.openstreetmap.org/reverse?format=json&zoom=10'
+var nominatimUrl = 'https://nominatim.openstreetmap.org/reverse?format=json&zoom=10'
 var placeOsmId, placeOsmType
 
 // ------------- functions -------------------
