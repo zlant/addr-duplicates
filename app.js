@@ -78,7 +78,7 @@ L.Control.LaneInfo = L.Control.extend({
 var lanes = [];
 
 var overpassUrl = 'https://overpass-api.de/api/interpreter?data='
-var overpassQuery = '[out:csv(::lat, ::lon, "addr:street", "addr:housenumber", "addr:suburb"; false)][timeout:25];(nwr["addr:street"]["addr:housenumber"]({{bbox}}););out center;'
+var overpassQuery = '[out:csv(::lat, ::lon, "addr:street", "addr:housenumber", "addr:suburb", "building"; false)][timeout:25];(nwr["addr:street"]["addr:housenumber"]({{bbox}}););out center;'
 
 var nominatimUrl = 'https://nominatim.openstreetmap.org/reverse?format=json&zoom=10'
 var placeOsmId, placeOsmType
@@ -128,7 +128,7 @@ function parseContent(content) {
     for (var line of content.split('\n')) {
         var addr = line.split('\t')
         var key = addr[2] + addr[3] + addr[4]
-        var value = { lat: addr[0], lon: addr[1] }
+        var value = { lat: addr[0], lon: addr[1], building: !!addr[5] }
         if(addrs[key])
             addrs[key].push(value)
         else
@@ -138,10 +138,11 @@ function parseContent(content) {
     for (var key in addrs) {
         if(addrs[key].length <= 1)
             continue
-        var duplicateGroup = addrs[key]
+        var duplicateGroup = addrs[key].sort((x, y) => y.building - x.building)
         for (var i = 1; i < duplicateGroup.length; i++) {
             duplicatePairs.push({
-                line: [duplicateGroup[0], duplicateGroup[i]]
+                line: [duplicateGroup[0], duplicateGroup[i]],
+                buildings: duplicateGroup[0].building && duplicateGroup[i].building,
             })
         }
     }
@@ -153,8 +154,8 @@ function render(dublicates){
     for(var duplicate of dublicates)
         lanes.push(L.polyline(duplicate.line,
             {
-                color: 'red',
-                weight: 2,
+                color: duplicate.buildings ? 'red' : 'blue',
+                weight: duplicate.buildings ? 2 : 1,
             })
             .addTo(map))
 }
