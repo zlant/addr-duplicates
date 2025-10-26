@@ -127,7 +127,7 @@ function parseContent(content) {
     var addrs = {}
     for (var line of content.split('\n')) {
         var addr = line.split('\t')
-        var key = addr[2] + addr[3] + addr[4]
+        var key = [addr[2], addr[3], addr[4]].join(', ')
         var value = { lat: addr[0], lon: addr[1], building: !!addr[5] }
         if(addrs[key])
             addrs[key].push(value)
@@ -143,6 +143,7 @@ function parseContent(content) {
             duplicatePairs.push({
                 line: [duplicateGroup[0], duplicateGroup[i]],
                 buildings: duplicateGroup[0].building && duplicateGroup[i].building,
+                addr: key,
             })
         }
     }
@@ -157,6 +158,7 @@ function render(dublicates){
                 color: duplicate.buildings ? 'red' : 'blue',
                 weight: duplicate.buildings ? 2 : 1,
             })
+            .bindTooltip(duplicate.addr)
             .addTo(map))
 }
 
